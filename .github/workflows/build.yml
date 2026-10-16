@@ -1,0 +1,26 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build universal app
+        run: scripts/build.sh --universal --zip
+
+      - name: Check bundle
+        run: |
+          lipo -info "build/Tmux Opener.app/Contents/MacOS/TmuxOpener"
+          codesign --verify --verbose "build/Tmux Opener.app"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TmuxOpener
+          path: build/TmuxOpener-*.zip

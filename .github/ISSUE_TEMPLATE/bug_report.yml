@@ -1,0 +1,23 @@
+name: Bug report
+description: Something doesn't work as expected
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: input
+    id: command
+    attributes:
+      label: Generated command
+      description: Right-click the session → Copy Command (remove anything private).
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      placeholder: "Tmux Opener 1.0.0 · macOS 15.1 · iTerm2 3.5.10"
+    validations:
+      required: true
