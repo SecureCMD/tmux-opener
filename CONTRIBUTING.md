@@ -29,5 +29,38 @@ You only need the Xcode Command Line Tools. You can also open `Package.swift` in
 1. Update `CHANGELOG.md`.
 2. Tag and push: `git tag v1.2.0 && git push origin v1.2.0`.
 
-GitHub Actions builds a universal app, publishes the release with the zip attached and updates
-the version and checksum in `Casks/tmux-opener.rb`, so `brew upgrade` picks it up.
+GitHub Actions builds a universal app, signs and notarizes it (when the secrets below are set),
+publishes the release with the zip attached and updates the version and checksum in
+`Casks/tmux-opener.rb`, so `brew upgrade` picks it up.
+
+## Code signing and notarization
+
+Release builds are signed with a **Developer ID Application** certificate, use the hardened
+runtime (with the Apple Events entitlement in `Resources/TmuxOpener.entitlements`), and are
+notarized and stapled so Gatekeeper opens them without warnings. Without the secrets, CI falls
+back to an ad-hoc signature.
+
+### GitHub secrets
+
+| Secret | What it is |
+| --- | --- |
+| `MACOS_CERTIFICATE_P12` | Developer ID Application certificate + private key, exported as `.p12`, base64-encoded (`base64 -i cert.p12 \| pbcopy`) |
+| `MACOS_CERTIFICATE_PASSWORD` | Password used when exporting the `.p12` |
+| `NOTARY_KEY_P8` | App Store Connect API key (`AuthKey_XXXX.p8`), base64-encoded |
+| `NOTARY_KEY_ID` | The API key's Key ID |
+| `NOTARY_ISSUER_ID` | The Issuer ID shown on the App Store Connect API keys page |
+
+To check them without publishing a release, run the **Build** workflow manually
+(Actions → Build → Run workflow) with **Sign and notarize** ticked.
+
+### Signing locally
+
+```sh
+# Once: store notary credentials in the keychain
+xcrun notarytool store-credentials tmux-opener \
+  --key AuthKey_XXXX.p8 --key-id <KEY_ID> --issuer <ISSUER_ID>
+
+SIGN_IDENTITY="Developer ID Application: <Name> (<TEAM_ID>)" \
+NOTARY_PROFILE=tmux-opener \
+make release
+```

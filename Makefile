@@ -1,4 +1,4 @@
-.PHONY: app install run zip universal clean
+.PHONY: app install run zip universal release clean
 
 app:            ## Build "build/Tmux Opener.app"
 	@scripts/build.sh
@@ -14,6 +14,9 @@ zip:            ## Build a distributable zip
 
 universal:      ## Universal (arm64 + x86_64) zip, needs Xcode
 	@scripts/build.sh --universal --zip
+
+release:        ## Signed + notarized universal zip (SIGN_IDENTITY, NOTARY_PROFILE)
+	@scripts/build.sh --universal --zip --notarize
 
 clean:
 	rm -rf .build build

@@ -1,27 +1,37 @@
 #!/bin/bash
 # Builds Tmux Opener and packages "build/Tmux Opener.app".
 #
-# Usage: scripts/build.sh [--install] [--universal] [--zip]
+# Usage: scripts/build.sh [--install] [--universal] [--zip] [--notarize]
 #   --install    copy the app to /Applications
 #   --universal  build for both Apple Silicon and Intel (requires Xcode)
 #   --zip        also create build/TmuxOpener-<version>.zip
+#   --notarize   notarize and staple (needs SIGN_IDENTITY, see scripts/notarize.sh)
 #
-# VERSION=1.2.3 scripts/build.sh  overrides the version in Info.plist.
+# Environment:
+#   VERSION=1.2.3          overrides the version in Info.plist
+#   SIGN_IDENTITY="Developer ID Application: …"
+#                          sign with that identity and the hardened runtime
+#                          (ad-hoc signature otherwise)
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 APP_NAME="Tmux Opener"
 BUILD_DIR="build"
 APP="$BUILD_DIR/$APP_NAME.app"
-INSTALL=0; UNIVERSAL=0; ZIP=0
+INSTALL=0; UNIVERSAL=0; ZIP=0; NOTARIZE=0
 for arg in "$@"; do
     case "$arg" in
         --install) INSTALL=1 ;;
         --universal) UNIVERSAL=1 ;;
         --zip) ZIP=1 ;;
+        --notarize) NOTARIZE=1 ;;
         *) echo "Unknown option: $arg" >&2; exit 1 ;;
     esac
 done
+if [[ $NOTARIZE == 1 && -z "${SIGN_IDENTITY:-}" ]]; then
+    echo "error: --notarize needs SIGN_IDENTITY (a Developer ID Application identity)" >&2
+    exit 1
+fi
 
 SWIFT_FLAGS=(-c release)
 [[ $UNIVERSAL == 1 ]] && SWIFT_FLAGS+=(--arch arm64 --arch x86_64)
@@ -58,8 +68,20 @@ rm -rf "$BUILD_DIR/AppIcon.iconset"
 swift scripts/make_icon.swift "$BUILD_DIR/AppIcon.iconset" >/dev/null
 iconutil -c icns "$BUILD_DIR/AppIcon.iconset" -o "$APP/Contents/Resources/AppIcon.icns"
 
-echo "▸ Signing (ad-hoc)"
-codesign --force --sign - "$APP"
+ENTITLEMENTS="Resources/TmuxOpener.entitlements"
+if [[ -n "${SIGN_IDENTITY:-}" ]]; then
+    echo "▸ Signing with $SIGN_IDENTITY"
+    codesign --force --options runtime --timestamp \
+        --entitlements "$ENTITLEMENTS" --sign "$SIGN_IDENTITY" "$APP"
+    codesign --verify --strict --verbose=2 "$APP"
+else
+    echo "▸ Signing (ad-hoc)"
+    codesign --force --entitlements "$ENTITLEMENTS" --sign - "$APP"
+fi
+
+if [[ $NOTARIZE == 1 ]]; then
+    scripts/notarize.sh "$APP"
+fi
 
 if [[ $ZIP == 1 ]]; then
     V=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$APP/Contents/Info.plist")

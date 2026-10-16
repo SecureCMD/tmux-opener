@@ -10,14 +10,33 @@ permissions:
 jobs:
   release:
     runs-on: macos-latest
+    env:
+      # Sign and notarize only when all secrets are configured; ad-hoc otherwise.
+      CAN_SIGN: ${{ secrets.MACOS_CERTIFICATE_P12 != '' && secrets.NOTARY_KEY_P8 != '' }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Import signing certificate
+        if: env.CAN_SIGN == 'true'
+        env:
+          MACOS_CERTIFICATE_P12: ${{ secrets.MACOS_CERTIFICATE_P12 }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          NOTARY_KEY_P8: ${{ secrets.NOTARY_KEY_P8 }}
+        run: scripts/ci-import-certificate.sh
 
       - name: Build universal app
         env:
           VERSION: ${{ github.ref_name }}
           BUILD_NUMBER: ${{ github.run_number }}
-        run: scripts/build.sh --universal --zip
+          NOTARY_KEY_ID: ${{ secrets.NOTARY_KEY_ID }}
+          NOTARY_ISSUER_ID: ${{ secrets.NOTARY_ISSUER_ID }}
+        run: |
+          if [[ "$CAN_SIGN" == "true" ]]; then
+            scripts/build.sh --universal --zip --notarize
+          else
+            echo "::warning::Signing secrets not set; publishing an ad-hoc signed build."
+            scripts/build.sh --universal --zip
+          fi
 
       - name: Checksum
         run: |
@@ -48,3 +67,9 @@ jobs:
           git -c user.name="NachE" -c user.email="nache.nache@gmail.com" \
             commit -am "tmux-opener $VERSION"
           git push origin main
+
+      - name: Remove signing keychain
+        if: always() && env.CAN_SIGN == 'true'
+        run: |
+          security delete-keychain "$RUNNER_TEMP/signing.keychain-db" || true
+          rm -f "$RUNNER_TEMP/notary_key.p8"
