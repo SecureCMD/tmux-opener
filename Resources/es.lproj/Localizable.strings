@@ -1,0 +1,75 @@
+/* Main window */
+"Search sessions" = "Buscar sesión";
+"New Session" = "Nueva sesión";
+"New Session…" = "Nueva sesión…";
+"New Session (⌘N)" = "Nueva sesión (⌘N)";
+"No Sessions" = "Sin sesiones";
+"Add a host and a tmux session to open it in iTerm with a single click." = "Añade un servidor y una sesión de tmux para abrirla en iTerm con un clic.";
+"Edit" = "Editar";
+"Opening in iTerm…" = "Abriendo en iTerm…";
+"Connect" = "Conectar";
+"Edit…" = "Editar…";
+"Duplicate" = "Duplicar";
+"Copy Command" = "Copiar comando";
+"Delete" = "Eliminar";
+"Delete…" = "Eliminar…";
+"Custom command" = "Comando personalizado";
+"Local" = "Local";
+"%@ copy" = "%@ (copia)";
+
+/* Editor */
+"Edit Session" = "Editar sesión";
+"Untitled" = "Sin nombre";
+"Appearance" = "Apariencia";
+"Name" = "Nombre";
+"Home Server" = "Servidor de casa";
+"Color" = "Color";
+"Icon" = "Icono";
+"Use a custom command" = "Usar comando personalizado";
+"Type the full command that will run in iTerm yourself." = "Escribe tú mismo el comando completo que se ejecutará en iTerm.";
+"Command" = "Comando";
+"SSH Connection" = "Conexión SSH";
+"User" = "Usuario";
+"user" = "usuario";
+"Host" = "Host";
+"server.local — empty for this Mac" = "server.local — vacío para este Mac";
+"Port" = "Puerto";
+"SSH options" = "Opciones de ssh";
+"Leave the host empty to run tmux on this Mac." = "Deja el host vacío para abrir tmux en este Mac.";
+"Session" = "Sesión";
+"tmux path" = "Ruta de tmux";
+"iTerm integration (-CC)" = "Integración con iTerm (-CC)";
+"Preview" = "Vista previa";
+"Delete “%@”?" = "¿Eliminar “%@”?";
+"Cancel" = "Cancelar";
+"Add" = "Añadir";
+"Save" = "Guardar";
+
+/* Settings */
+"Open in" = "Abrir en";
+"New window" = "Nueva ventana";
+"New tab" = "Nueva pestaña";
+"Profile" = "Perfil";
+"Default profile" = "Perfil por defecto";
+"iTerm is not installed" = "iTerm no está instalado";
+"Defaults for New Sessions" = "Valores por defecto para nuevas sesiones";
+"General" = "General";
+"Show in menu bar" = "Mostrar en la barra de menús";
+"Configuration" = "Configuración";
+"Show in Finder" = "Mostrar en Finder";
+
+/* Menus */
+"Import Sessions…" = "Importar sesiones…";
+"Export Sessions…" = "Exportar sesiones…";
+"Show Configuration in Finder" = "Mostrar configuración en Finder";
+"Sessions" = "Sesiones";
+"Open Tmux Opener…" = "Abrir Tmux Opener…";
+"Quit Tmux Opener" = "Salir de Tmux Opener";
+
+/* Errors */
+"Couldn’t open “%@”" = "No se pudo abrir “%@”";
+"Open System Settings" = "Abrir Ajustes del Sistema";
+"iTerm couldn’t be found. Install it from iterm2.com." = "No se encontró iTerm. Instálalo desde iterm2.com.";
+"Tmux Opener isn’t allowed to control iTerm. Enable it in System Settings → Privacy & Security → Automation." = "Tmux Opener no tiene permiso para controlar iTerm. Actívalo en Ajustes del Sistema → Privacidad y seguridad → Automatización.";
+"Couldn’t prepare the AppleScript." = "No se pudo preparar el AppleScript.";
+"Unknown error (%lld)." = "Error desconocido (%lld).";
