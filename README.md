@@ -89,6 +89,16 @@ remote tmux windows show up as native iTerm tabs.
 
 ## Install
 
+### Homebrew
+
+```sh
+brew tap securecmd/tmux-opener https://github.com/SecureCMD/tmux-opener
+brew install --cask tmux-opener
+```
+
+Upgrade with `brew upgrade --cask tmux-opener`. To remove the app and its settings,
+run `brew uninstall --zap --cask tmux-opener`.
+
 ### Download
 
 1. Grab `TmuxOpener-<version>.zip` from the
@@ -97,7 +107,8 @@ remote tmux windows show up as native iTerm tabs.
 3. Open it.
 
 > [!NOTE]
-> The app is open source and ad-hoc signed, not notarized by Apple, so the first time you open it
+> The app is open source and ad-hoc signed, not notarized by Apple. Homebrew takes care of this
+> for you; with a manual download, the first time you open it
 > macOS will say it can't verify the developer. Go to **System Settings → Privacy & Security**
 > and click **Open Anyway**, or run:
 >
@@ -221,12 +232,14 @@ Sources/TmuxOpener/
 └── Screenshots.swift      Staged captures for this README
 Resources/                 Info.plist and localizations (en, es)
 scripts/                   Build, icon and screenshot scripts
+Casks/tmux-opener.rb       Homebrew cask (this repo doubles as a tap)
 ```
 
 To regenerate the screenshots in `docs/images` with demo data, run `scripts/screenshots.sh`.
 
-Releases are automated: pushing a tag like `v1.2.0` builds a universal binary on GitHub Actions
-and attaches the zip to a new GitHub release.
+Releases are automated: pushing a tag like `v1.2.0` builds a universal binary on GitHub Actions,
+attaches the zip to a new GitHub release and bumps the Homebrew cask in
+[`Casks/tmux-opener.rb`](Casks/tmux-opener.rb).
 
 ## Contributing
 

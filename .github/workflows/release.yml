@@ -33,3 +33,18 @@ jobs:
             build/TmuxOpener-*.zip build/SHA256SUMS.txt \
             --title "Tmux Opener ${{ github.ref_name }}" \
             --generate-notes
+
+      - name: Update Homebrew cask
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          SHA=$(shasum -a 256 "build/TmuxOpener-$VERSION.zip" | cut -d' ' -f1)
+          git fetch origin main
+          git checkout main
+          sed -i '' -E \
+            -e "s/^  version \".*\"/  version \"$VERSION\"/" \
+            -e "s/^  sha256 \".*\"/  sha256 \"$SHA\"/" \
+            Casks/tmux-opener.rb
+          git diff --quiet && exit 0
+          git -c user.name="NachE" -c user.email="nache.nache@gmail.com" \
+            commit -am "tmux-opener $VERSION"
+          git push origin main

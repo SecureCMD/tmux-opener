@@ -20,6 +20,9 @@ jobs:
           lipo -info "build/Tmux Opener.app/Contents/MacOS/TmuxOpener"
           codesign --verify --verbose "build/Tmux Opener.app"
 
+      - name: Lint Homebrew cask
+        run: brew style Casks/tmux-opener.rb
+
       - uses: actions/upload-artifact@v4
         with:
           name: TmuxOpener

@@ -29,4 +29,5 @@ You only need the Xcode Command Line Tools. You can also open `Package.swift` in
 1. Update `CHANGELOG.md`.
 2. Tag and push: `git tag v1.2.0 && git push origin v1.2.0`.
 
-GitHub Actions builds a universal app and publishes the release with the zip attached.
+GitHub Actions builds a universal app, publishes the release with the zip attached and updates
+the version and checksum in `Casks/tmux-opener.rb`, so `brew upgrade` picks it up.

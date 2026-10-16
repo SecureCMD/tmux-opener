@@ -4,6 +4,13 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- Homebrew cask: `brew tap securecmd/tmux-opener https://github.com/SecureCMD/tmux-opener`
+  then `brew install --cask tmux-opener`. The release workflow keeps it up to date.
+
 ## [1.0.0] - 2026-10-16
 
 ### Added
