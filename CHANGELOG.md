@@ -8,8 +8,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
-- Homebrew cask: `brew tap securecmd/tmux-opener https://github.com/SecureCMD/tmux-opener`
-  then `brew install --cask tmux-opener`. The release workflow keeps it up to date.
+- Homebrew cask: `brew tap securecmd/tmux-opener https://github.com/SecureCMD/tmux-opener`,
+  `brew trust securecmd/tmux-opener`, then `brew install --cask tmux-opener`. The release workflow keeps it up to date.
 
 ## [1.0.0] - 2026-10-16
 

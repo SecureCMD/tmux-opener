@@ -93,8 +93,11 @@ remote tmux windows show up as native iTerm tabs.
 
 ```sh
 brew tap securecmd/tmux-opener https://github.com/SecureCMD/tmux-opener
+brew trust securecmd/tmux-opener
 brew install --cask tmux-opener
 ```
+
+`brew trust` is required by Homebrew 7+ before installing from a third-party tap.
 
 Upgrade with `brew upgrade --cask tmux-opener`. To remove the app and its settings,
 run `brew uninstall --zap --cask tmux-opener`.
